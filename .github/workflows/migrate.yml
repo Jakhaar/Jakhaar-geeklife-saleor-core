@@ -1,0 +1,26 @@
+name: Run Migrations on Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python3 manage.py migrate
